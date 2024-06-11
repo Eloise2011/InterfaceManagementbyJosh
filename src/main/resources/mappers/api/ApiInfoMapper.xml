@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="elo.pra.dao.ApiInfoDao">
+<!--    <resultMap id="BaseResultMap"-->
+<!--               type="elo.pra.vo.ApiInfo">-->
+<!--        <id column="kpi_code" property="kpiCode" jdbcType="VARCHAR"/>-->
+<!--        <id column="bd_identify" property="bdIdentify" jdbcType="VARCHAR"/>-->
+<!--        <result column="module_id" property="moduleId" jdbcType="BIGINT"/>-->
+<!--        <result column="resource_id" property="resourceId" jdbcType="VARCHAR"/>-->
+<!--        <result column="schema_name" property="schemaName" jdbcType="VARCHAR"/>-->
+<!--        <result column="table_name" property="tableName" jdbcType="VARCHAR"/>-->
+<!--        <result column="description" property="description" jdbcType="VARCHAR"/>-->
+<!--        <result column="status_flag" property="statusFlag" jdbcType="VARCHAR"/>-->
+<!--        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>-->
+<!--        <result column="create_time" property="createTime" jdbcType="VARCHAR"/>-->
+<!--        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>-->
+<!--        <result column="update_time" property="updateTime" jdbcType="VARCHAR"/>-->
+<!--        <result column="version_num" property="versionNum" jdbcType="BIGINT"/>-->
+
+<!--    </resultMap>-->
+
+    <select id="search" resultType="elo.pra.vo.ApiInfo">
+        SELECT
+        kpi_code as kpi_code -- 报表编码,
+        , bd_identify as bd_identify -- 事业部标识,
+        , module_id as module_id -- 模块ID,
+        , resource_id as resource_id -- 资源ID,
+        , schema_name as schema_name -- 接口对应的schema,
+        , table_name as table_name -- 表名,
+        , description as description -- 接口说明,
+        , status_flag as status_flag -- 接口状态标识，1-正常，0-停用,
+        , create_by as create_by
+        , create_time as create_time
+        , update_by as update_by
+        , update_time as update_time
+        FROM iicc_inf_api_info
+        <where>
+            <if test="bdIdentify != null and bdIdentify != ''">
+                AND bd_identify = 'SDB' -- #{bdIdentify}
+            </if>
+            <if test="key != null and key != ''">
+                AND (kpi_code LIKE CONCAT('%', #{key}, '%')
+                or bd_identify = #{key}
+                or table_name LIKE CONCAT('%', #{key}, '%')
+                or description LIKE CONCAT('%', #{key}, '%'))
+            </if>
+            and trash_flag = 0
+        </where>
+        ORDER BY update_time desc
+    </select>
+
+
+</mapper>

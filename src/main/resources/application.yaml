@@ -1,0 +1,25 @@
+spring:
+  thymeleaf:
+    cache: false
+    mode: HTML
+    prefix: classpath:/templates/
+    suffix: .html
+    encoding: UTF-8
+  messages:
+    basename: i18N/messages
+  resources:
+    static-locations: classpath:/static
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/iicc_inf_ss?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT%2B8
+    username: root
+    password: MyNewPassword
+    driver-class-name: com.mysql.cj.jdbc.Driver
+server:
+  port: 8112
+mybatis:
+  config-location: classpath:/mybatis-config.xml
+app:
+  url:
+    houseBeaura_GZ:
+      prefix: /Volumes/X/
+      suffix: .html

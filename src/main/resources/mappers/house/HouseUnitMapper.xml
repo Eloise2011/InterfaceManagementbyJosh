@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="elo.pra.dao.HouseUnitDao">
+    <resultMap id="baseResultMap" type="elo.pra.vo.HouseUnit">
+        <result property="saleStatusEnum" column="{status=status, color=color, hexo_code=hexoCode}" typeHandler="elo.pra.config.SaleStatusEnumListSaleStatusHandler"/>
+    </resultMap>
+
+
+    <insert id="insertBatch" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.List">
+        INSERT INTO `house_unit`
+        (
+        `presale_permit_number`
+        , `floor`
+        , `category`
+        , `room_number`
+        , `design`
+        , `interior_size`
+        , `full_construct_size`
+        , `status`
+        , `color`
+        , `hex_code`
+        , `types`
+        , `insertion_date`
+        , `modification_date`
+        , `is_sealed`
+        , `is_mortgaged`
+        )
+        VALUES
+        <foreach collection="units" item="unit" separator="," >
+            (
+            #{unit.presalePermitNumber}
+            , #{unit.floor}
+            , #{unit.category}
+            , #{unit.roomNumber}
+            , #{unit.design}
+            , #{unit.interiorSize}
+            , #{unit.fullConstructSize}
+            , #{unit.saleStatusEnum.status}
+            , #{unit.saleStatusEnum.color}
+            , #{unit.saleStatusEnum.hexCode}
+            , #{unit.types, typeHandler=org.example.config.TypeEnumListTypeHandler}
+            , CURDATE()
+            , CURDATE()
+            , #{unit.isSealed}
+            , #{unit.isMortgaged}
+            )
+        </foreach>
+    </insert>
+
+    <select id="getbyPresale" resultMap="baseResultMap">
+        select
+                presale_permit_number
+             ,  floor
+             ,  category
+             ,  room_number
+             ,  design
+             ,  interior_size
+             ,  full_construct_size
+             ,  status
+             ,  color
+             ,  hex_code
+             ,  types
+             ,  insertion_date
+             ,  modification_date
+             ,  is_sealed
+             ,  is_mortgaged
+        from  house_unit
+        <where>
+            presale_permit_number = #{presalePermitNumber}
+        </where>
+    </select>
+</mapper>
